@@ -1,90 +1,68 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
-import Layout from './components/Layout';
+// App.js - Main application component
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import Dashboard from './components/Layout/Dashboard';
+import DashboardHome from './components/Dashboard/DashboardHome';
+import ProductList from './components/Products/ProductList';
+import ProductForm from './components/Products/ProductForm';
+import Import from './components/Products/Import';
+import NewSale from './components/Sales/NewSale';
+import SalesList from './components/Sales/SalesList';
+import SaleDetail from './components/Sales/SaleDetail';
+import CustomerList from './components/Customers/CustomerList';
+import CustomerForm from './components/Customers/CustomerForm';
+import DebtList from './components/Debt/DebtList';
+import DebtForm from './components/Debt/DebtForm';
 
-// ນຳເຂົ້າໜ້າຕ່າງໆ (Pages)
-// ຕົວຢ່າງການນຳເຂົ້າໜ້າຕ່າງໆ (ທ່ານສາມາດປ່ຽນແປງໂຕນຳເຂົ້າຕາມໂຄງສ້າງໂຄງການຂອງທ່ານ)
-/*
-import Dashboard from './pages/Dashboard';
-import Sales from './pages/Sales';
-import ManageData from './pages/ManageData';
-import Settings from './pages/Settings';
-import Reports from './pages/Reports';
-*/
-// ສ້າງ theme ຂອງແອັບ
+// Create a theme with Lao language support
 const theme = createTheme({
+  typography: {
+    fontFamily: '"Noto Sans Lao", "Roboto", "Helvetica", "Arial", sans-serif',
+  },
   palette: {
     primary: {
-      main: '#1976d2', // ສີຫຼັກ - ທ່ານສາມາດປັບປ່ຽນໄດ້
-      contrastText: '#fff',
+      main: '#1976d2',
     },
     secondary: {
-      main: '#f50057', // ສີຮອງ - ທ່ານສາມາດປັບປ່ຽນໄດ້
-    },
-    background: {
-      default: '#f5f5f5', // ສີພື້ນຫຼັງ - ທ່ານສາມາດປັບປ່ຽນໄດ້
-    },
-  },
-  typography: {
-    fontFamily: [
-      'Noto Sans Lao',
-      'Roboto',
-      'Arial',
-      'sans-serif'
-    ].join(','),
-  },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: 8,
-          textTransform: 'none',
-          fontWeight: 500,
-        },
-      },
-    },
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          borderRadius: 8,
-        },
-      },
+      main: '#dc004e',
     },
   },
 });
 
-// ສ່ວນປະກອບສຳລັບຫນ້າທີ່ບໍ່ພົບ
-function NotFound() {
-  return (
-    <Layout title="ບໍ່ພົບຫນ້າ">
-      <div style={{ textAlign: 'center', padding: '50px 0' }}>
-        <h2>404 - ບໍ່ພົບຫນ້າທີ່ຕ້ອງການ</h2>
-        <p>ຫນ້າທີ່ທ່ານຄົ້ນຫາບໍ່ພົບໃນລະບົບ</p>
-      </div>
-    </Layout>
-  );
-}
-
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline /> {/* ຣີເຊັດ CSS ເລີ່ມຕົ້ນ */}
-      <Router>
+      <CssBaseline />
+      <BrowserRouter>
         <Routes>
-          {/* ຫນ້າຕ່າງໆໃນລະບົບ */}
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/sales" element={<Sales />} />
-          <Route path="/manage-data" element={<ManageData />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/reports" element={<Reports />} />
-          
-          {/* ເມື່ອເຂົ້າທີ່ URL "/" ໃຫ້ນຳທາງໄປຫນ້າ Dashboard */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          
-          {/* ຫນ້າ 404 ສຳລັບ URL ທີ່ບໍ່ພົບ */}
-          <Route path="*" element={<NotFound />} />
+          <Route path="/" element={<Dashboard />}>
+            <Route index element={<DashboardHome />} />
+            <Route path="sales">
+              <Route index element={<SalesList />} />
+              <Route path="new" element={<NewSale />} />
+              <Route path=":id" element={<SaleDetail />} />
+            </Route>
+            <Route path="products">
+              <Route index element={<ProductList />} />
+              <Route path="new" element={<ProductForm />} />
+              <Route path="edit/:id" element={<ProductForm />} />
+              <Route path="import" element={<Import />} />
+            </Route>
+            <Route path="customers">
+              <Route index element={<CustomerList />} />
+              <Route path="new" element={<CustomerForm />} />
+              <Route path="edit/:id" element={<CustomerForm />} />
+            </Route>
+            <Route path="debts">
+              <Route index element={<DebtList />} />
+              <Route path="new" element={<DebtForm />} />
+              <Route path="edit/:id" element={<DebtForm />} />
+            </Route>
+          </Route>
         </Routes>
-      </Router>
+      </BrowserRouter>
     </ThemeProvider>
   );
 }
